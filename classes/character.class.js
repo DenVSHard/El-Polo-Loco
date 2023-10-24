@@ -12,7 +12,7 @@ class Character extends MovableObject {
         'img/img/2_character_pepe/2_walk/W-25.png',
         'img/img/2_character_pepe/2_walk/W-26.png'
     ];
-    currentImage = 0;
+    world;
 
     constructor() {
         super().loadImage('img/img/2_character_pepe/2_walk/W-21.png');
@@ -23,11 +23,14 @@ class Character extends MovableObject {
 
     animate() { // durchläuft das array IMAGES_WALKING
         setInterval(() => { // animiert den character
-            let i = this.currentImage % this.IMAGES_WALKING.length; // % ist ein modulo operator
-            let path = this.IMAGES_WALKING[i];
-            this.img = this.imageCache[path];
-            this.currentImage++; // springt zum nächsten bild
-        }, 100); // alle 100 millisekunden
+
+            if (this.world.keyboard.RIGHT) {
+                let i = this.currentImage % this.IMAGES_WALKING.length; // % ist ein modulo operator
+                let path = this.IMAGES_WALKING[i];
+                this.img = this.imageCache[path];
+                this.currentImage++; // springt zum nächsten bild
+            }
+        }, 150); // alle 100 millisekunden
     }
 
     jump() {

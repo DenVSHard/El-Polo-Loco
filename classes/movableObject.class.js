@@ -5,6 +5,9 @@ class MovableObject {
     height = 250;
     width = 130;
     imageCache = {};
+    currentImage = 0;
+    speed = 0.10;
+
 
     loadImage(path) {
         this.img = new Image();
@@ -24,6 +27,8 @@ class MovableObject {
     }
 
     moveLeft() {
-
+        setInterval(() => { // läst wolken nach links bewegen
+            this.x -= this.speed; // 0,25 Pixsel pro sekunde
+        }, 1000 / 60); // zeitintervall 1000 millisekunden durch 60 entspricht 60 hertz
     }
 }
