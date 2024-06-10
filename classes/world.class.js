@@ -1,15 +1,13 @@
 class World {
     character = new Character();
-    enemies = level1.enemies;
-    clouds = level1.clouds;
-    backgroundObjects = level1.backgroundObjects;
-    canvas;
-    ctx; // abkürzung für context
+    level = level1;
+    canvas; // ist der schwarze Bilschirm mit den X Y koordinaten.
+    ctx; // abkürzung für context sorgt dafür das man auf canvas zeichnen kann.
     keyboard;
     camera_x = 0;
 
     constructor(canvas, keyboard) {
-        this.ctx = canvas.getContext('2d');
+        this.ctx = canvas.getContext('2d'); //sorgt dafür das man auf canvas zeichnen kann in 2d.
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
@@ -20,17 +18,18 @@ class World {
         this.character.world = this;
     }
 
+    // Zeichnen in canvas
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //leert canvas
 
-        this.ctx.translate(this.camera_x, 0);
+        this.ctx.translate(this.camera_x, 0); //Camera vershieben
 
-        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.level.backgroundObjects);
         this.addToMap(this.character);
-        this.addObjectsToMap(this.enemies);
-        this.addObjectsToMap(this.clouds);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.clouds);
 
-        this.ctx.translate(-this.camera_x, 0);
+        this.ctx.translate(-this.camera_x, 0); //Camera zurück vershieben
 
         //wiederholt draw() immer wieder
         let self = this;

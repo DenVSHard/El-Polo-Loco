@@ -19,13 +19,13 @@ class Chicken extends MovableObject {
     }
 
     animate() { // durchläuft das array IMAGES_WALKING
-        this.moveLeft();
 
-        setInterval(() => { // animiert den character
-            let i = this.currentImage % this.IMAGES_WALKING.length; // % ist ein modulo operator
-            let path = this.IMAGES_WALKING[i];
-            this.img = this.imageCache[path];
-            this.currentImage++; // springt zum nächsten bild
+        setInterval(() => { // läst wolken und Chicken nach links bewegen
+            this.moveLeft();
+        }, 1000 / 60); // zeitintervall 1000 millisekunden durch 60 entspricht 60 hertz
+
+        setInterval(() => { // animiert das Chicken
+            this.playAnimation(this.IMAGES_WALKING);
         }, 100); // alle 100 millisekunden
     }
 }
