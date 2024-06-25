@@ -5,6 +5,7 @@ class World {
     ctx; // abkürzung für context sorgt dafür das man auf canvas zeichnen kann.
     keyboard;
     camera_x = 0;
+    statusBar = new StatusBar();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d'); //sorgt dafür das man auf canvas zeichnen kann in 2d.
@@ -12,24 +13,41 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        this.checkCollisions();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
+    checkCollisions() {
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if (this.character.isColliding(enemy)) {
+                   this.character.hit();
+                   this.statusBar.setPercentage(this.character.energy);
+                }
+            });
+        }, 200);
+    }
+
     // Zeichnen in canvas
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); //leert canvas
 
-        this.ctx.translate(this.camera_x, 0); //Camera vershieben
+        this.ctx.translate(this.camera_x, 0); //Camera nach vorne vershieben
 
         this.addObjectsToMap(this.level.backgroundObjects);
+
+        this.ctx.translate(-this.camera_x, 0); //Camera nach hinten vershieben
+        this.addToMap(this.statusBar);
+        this.ctx.translate(this.camera_x, 0); //Camera nach vorne vershieben
+
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.clouds);
 
-        this.ctx.translate(-this.camera_x, 0); //Camera zurück vershieben
+        this.ctx.translate(-this.camera_x, 0); //Camera nach hinten vershieben
 
         //wiederholt draw() immer wieder
         let self = this;
@@ -47,16 +65,27 @@ class World {
     addToMap(MovableObject) {
         // den character drehen
         if (MovableObject.otherDirection) {
-            this.ctx.save();// context speichern
-            this.ctx.translate(MovableObject.width, 0); // img spiegeln
-            this.ctx.scale(-1, 1); // spiegelt den charecter um seine eigene breite
-            MovableObject.x = MovableObject.x * -1; // die x-coordinaten werden gespiegelt
+            this.flipImage(MovableObject);
         }
-        this.ctx.drawImage(MovableObject.img, MovableObject.x, MovableObject.y, MovableObject.width, MovableObject.height);
+
+        MovableObject.draw(this.ctx);
+        MovableObject.drawFrame(this.ctx);
+
         // den character zurück drehen
         if (MovableObject.otherDirection) {
-            MovableObject.x = MovableObject.x * -1;
-            this.ctx.restore();
+            this.flipImageBack(MovableObject);
         }
+    }
+
+    flipImage(MovableObject) {
+        this.ctx.save();// context speichern
+        this.ctx.translate(MovableObject.width, 0); // img spiegeln
+        this.ctx.scale(-1, 1); // spiegelt den charecter um seine eigene breite
+        MovableObject.x = MovableObject.x * -1; // die x-coordinaten werden gespiegelt
+    }
+
+    flipImageBack(MovableObject) {
+        MovableObject.x = MovableObject.x * -1;
+        this.ctx.restore();
     }
 }
