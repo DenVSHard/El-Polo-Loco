@@ -6,6 +6,7 @@ class World {
     keyboard;
     camera_x = 0;
     statusBar = new StatusBar();
+    throwableObjects = [];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d'); //sorgt dafür das man auf canvas zeichnen kann in 2d.
@@ -13,22 +14,35 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        this.checkCollisions();
+        this.run();
     }
 
     setWorld() {
         this.character.world = this;
     }
 
-    checkCollisions() {
+    run() {
         setInterval(() => {
-            this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
-                   this.character.hit();
-                   this.statusBar.setPercentage(this.character.energy);
-                }
-            });
+            this.checkCollisions();
+            this.checkThrowableObjects();
         }, 200);
+    }
+
+    // Flaschenwurf
+    checkThrowableObjects() {
+        if (this.keyboard.SPACE) {
+            let bottle = new ThrowableObject(this.character.x + 80, this.character.y + 120);
+            this.throwableObjects.push(bottle);
+        }
+    }
+
+    checkCollisions() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy)) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+            }
+        });
     }
 
     // Zeichnen in canvas
@@ -39,13 +53,15 @@ class World {
 
         this.addObjectsToMap(this.level.backgroundObjects);
 
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies); // Objekte hinzufügen
+        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.throwableObjects);
+
         this.ctx.translate(-this.camera_x, 0); //Camera nach hinten vershieben
         this.addToMap(this.statusBar);
         this.ctx.translate(this.camera_x, 0); //Camera nach vorne vershieben
 
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.clouds);
 
         this.ctx.translate(-this.camera_x, 0); //Camera nach hinten vershieben
 

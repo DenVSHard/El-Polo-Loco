@@ -3,11 +3,19 @@ const level1 = new Level(
         new Chicken(),
         new Chicken(),
         new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
         new Endboss()
     ],
 
     [
-        new Cloud()
+        new Cloud(-720),
+        new Cloud(0),
+        new Cloud(720),
+        new Cloud(720*2),
+        new Cloud(720*3),
+        new Cloud(720*4)
     ],
     
     [

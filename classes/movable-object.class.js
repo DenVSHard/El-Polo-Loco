@@ -1,5 +1,5 @@
 class MovableObject extends DrawableObject {
-  
+
     speed = 0.10;
     otherDirection = false; // Spiegeln
     speedY = 0;
@@ -17,7 +17,11 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() { // Ob der Character über dem boden ist
-        return this.y < 180;
+        if (this instanceof ThrowableObject) {
+            return true;
+        } else {
+            return this.y < 180;
+        }
     }
 
     /*Bessere Formel zur Kollisionsberechnung (Genauer)

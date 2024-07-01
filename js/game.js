@@ -29,6 +29,10 @@ window.addEventListener("keydown", (e) => { // wen die tasten gedrükt werden, w
     if (e.keyCode == 32) {
         keyboard.SPACE = true;
     }
+
+    if (e.keyCode == 68) {
+        keyboard.D = true;
+    }
 });
 
 window.addEventListener("keyup", (e) => { // sobald die Taste losgelassen wird ist es wieder false
@@ -50,5 +54,9 @@ window.addEventListener("keyup", (e) => { // sobald die Taste losgelassen wird i
 
     if (e.keyCode == 32) {
         keyboard.SPACE = false;
+    }
+
+    if (e.keyCode == 68) {
+        keyboard.D = false;
     }
 });
